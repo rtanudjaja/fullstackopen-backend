@@ -1,4 +1,5 @@
 const { response } = require("express");
+const morgan = require('morgan')
 const express = require("express");
 const app = express();
 
@@ -25,6 +26,18 @@ let persons = [
   },
 ];
 
+app.use(morgan(function (tokens, req, res) {
+  const datasent = JSON.parse(JSON.stringify(req.body))
+  delete datasent.id
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms',
+    JSON.stringify(datasent)
+  ].join(' ')
+}));
 app.use(express.json());
 
 app.get("/api/persons", (req, res) => {
