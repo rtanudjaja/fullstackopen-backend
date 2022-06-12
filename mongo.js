@@ -40,13 +40,13 @@ if (process.argv.length === 5) {
 //list all people
 else if(process.argv.length === 3) {
   mongoose.connect(url)
-  console.log("phonebook:")
-  Person.find({}).then(result => {
-    result.forEach(person => {
-      console.log(person.name, person.number)
+  console.log('phonebook:')
+  Person.find({})
+    .then(result => {
+      result.forEach(person => {
+        console.log(person.name, person.number)
+      })
+      mongoose.connection.close()
     })
-    mongoose.connection.close()
-  })
-  .catch((err) => console.log(err))
+    .catch((err) => console.log(err))
 }
-  
