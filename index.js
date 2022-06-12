@@ -68,20 +68,21 @@ app.post("/api/persons", (req, res, next) => {
       if (person) {
         return res.status(400).json({ error: "Name is already in the phonebook" });
       }
+      else {
+        const person = new Person({
+          name: body.name,
+          number: body.number,
+        });
+      
+        person
+          .save()
+          .then((savedPerson) => savedPerson.toJSON())
+          .then((savedAndFormattedPerson) => {
+            res.json(savedAndFormattedPerson);
+          })
+          .catch((error) => next(error));
+      }
     })
-
-  const person = new Person({
-    name: body.name,
-    number: body.number,
-  });
-
-  person
-    .save()
-    .then((savedPerson) => savedPerson.toJSON())
-    .then((savedAndFormattedPerson) => {
-      res.json(savedAndFormattedPerson);
-    })
-    .catch((error) => next(error));
 });
 
 app.put("/api/persons/:id", (req, res, next) => {
